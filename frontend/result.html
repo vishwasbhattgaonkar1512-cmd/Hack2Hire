@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interview Result – Hack2Hire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <header class="brand">
+        <h1>📊 Interview Result</h1>
+        <p class="tag">Performance Analysis & Hiring Readiness</p>
+    </header>
+
+    <div class="card result-card">
+        <div class="score">
+            <div class="num" id="finalScore">0%</div>
+            <div class="label">Accuracy</div>
+        </div>
+
+        <div class="feedback">
+            <h3 id="badge"></h3>
+            <p id="summary"></p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Performance Analysis</h3>
+        <canvas id="resultChart"></canvas>
+    </div>
+
+    <div class="actions">
+        <button class="primary" onclick="window.location.href='index.html'">
+            Start New Interview
+        </button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Load result from localStorage
+    const result = JSON.parse(localStorage.getItem("interviewResult"));
+
+    if (result) {
+        document.getElementById("finalScore").innerText = result.accuracy + "%";
+        document.getElementById("badge").innerText = result.badge;
+        document.getElementById("summary").innerText =
+            "You answered " + result.attempts +
+            " questions. This result reflects your interview readiness.";
+
+        new Chart(document.getElementById("resultChart"), {
+            type: 'line',
+            data: {
+                labels: result.scores.map((_, i) => `Q${i + 1}`),
+                datasets: [{
+                    label: 'Accuracy %',
+                    data: result.scores,
+                    borderWidth: 2
+                }]
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
